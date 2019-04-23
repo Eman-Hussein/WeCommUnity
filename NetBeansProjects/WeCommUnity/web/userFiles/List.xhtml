@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Created by Fatimah Alotaibi on 2019.03.20
+Copyright © 2018 Osman Balci. All rights reserved.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template/siteTemplate.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="My Videos"></h:outputText>
+        </ui:define>
+
+        <ui:define name="editableContent">
+            <h:form id="UserVideoListForm">
+                <p:panel header="My List of Favorite YouTube Videos">
+                    <p:dataTable id="datalist" value="#{userVideoController.items}" var="item"
+                                 selectionMode="single" selection="#{userVideoController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton playButton shareButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton playButton shareButton"/>
+
+                        <p:column style="width: 20px">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListUserVideoTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}" />
+                        </p:column>
+                        <p:column sortBy="#{item.title}" style="width:100px">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListUserVideoTitle_title}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.title}"/>
+                        </p:column>
+                        
+                            <p:column style="width:80px; alignment-adjust: middle">
+                            <f:facet name="header">
+                                <h:outputText value="Thumbnail"/>
+                            </f:facet>
+                                <h:graphicImage value="https://i1.ytimg.com/vi/#{item.youtubeVideoId}/hqdefault.jpg" width="90" height="80" styleClass="scalableImage" style="alignment-adjust: middle " />
+                        </p:column>
+                             <p:column style="width:250px">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListUserVideoTitle_description}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.description}"/>
+                        </p:column>
+                        
+                        <p:column style="width:80px;" sortBy="#{item.duration}" >
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListUserVideoTitle_duration}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.duration}"/>
+                        </p:column>
+                       <p:column style="width:100px;" sortBy="#{item.datePublished}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListUserVideoTitle_datePublished}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.datePublished}">
+                                <f:convertDateTime pattern="MM/dd/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="width: 80px" sortBy="#{item.category}">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListUserVideoTitle_category}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.category}"/>
+                        </p:column>
+                        <p:column style="width: 80px">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListUserVideoTitle_userId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.userId}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="fas fa-plus"   value="#{bundle.Create}" actionListener="#{userVideoController.prepareCreate}" update=":UserVideoCreateForm" oncomplete="PF('UserVideoCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="fas fa-eye"  value="#{bundle.View}" update=":UserVideoViewForm" oncomplete="PF('UserVideoViewDialog').show()" disabled="#{empty userVideoController.selected}"/>
+                            <p:commandButton id="editButton"   icon="fas fa-edit" value="#{bundle.Edit}" update=":UserVideoEditForm" oncomplete="PF('UserVideoEditDialog').show()" disabled="#{empty userVideoController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="fas fa-trash-alt"  value="#{bundle.Delete}" actionListener="#{userVideoController.destroy}" update=":growl,datalist" disabled="#{empty userVideoController.selected}"/>
+                            <p:commandButton   id="playButton"    value="Play"  update= ":UserVideoPlayForm" icon="fas fa-play" disabled="#{empty userVideoController.selected}"  oncomplete="PF('UserVideoPlayDialog').show()"/>
+                            <p:commandButton id="shareButton" value="Share" icon="fas fa-share" update=":growlInfoMessage,:growlWarningMessage,:growlErrorMessage,:growlFatalMessage" actionListener="#{userVideoController.shareUserVideo()}"
+                                             disabled="#{empty userVideoController.selected}">
+
+                                <p:confirm header="Share Confirmation"
+                                           message="Are you sure you want to add the selected video to the Signed-In User's List of favorite YouTube Videos?"
+                                           icon="fas fa-exclamation-triangle fa-2x"/>
+                            </p:commandButton>
+                            <p:confirmDialog id="confirmShareDialogBox" global="true" showEffect="fade" hideEffect="fade">
+
+                                <div align="center">
+                                    <p:commandButton value="No" type="button" class="ui-confirmdialog-no" icon="fas fa-window-close" />
+                                    <p:commandButton value="Yes" type="button" class="ui-confirmdialog-yes" icon="fas fa-check-square"  actionListener="#{userVideoController.shareUserVideo()}" oncomplete="#{userVideoController.shareUserVideo()}" />
+                                </div>
+                            </p:confirmDialog>
+
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+            <ui:include src="PlayVideo.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

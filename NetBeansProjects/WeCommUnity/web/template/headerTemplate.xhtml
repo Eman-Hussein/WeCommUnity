@@ -37,7 +37,10 @@ Copyright © 2018 Osman Balci. All rights reserved.
                             <img src="#{resource['images:CriticalConnextionsLogo.jpg']}"
                                  style="height:100%; max-height:64px; max-width:215px; border: none"
                                  alt="Critical ConneXtions Logo" />
+
                         </h:link>
+                        <h1> WeCommUnity </h1>
+                     
 
                     </td>
                     <!--
@@ -57,6 +60,7 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                     </c:when> 
                                     <c:otherwise>
                                         <c:when test="#{userController.isLoggedIn() == false}">
+
                                             <h1>Hello Dear Visitor</h1>
                                         </c:when>
                                     </c:otherwise>
@@ -86,6 +90,9 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                 <h:link outcome="/index" class="standardText">
                                     <i class="fas fa-home"></i>&nbsp;Home
                                 </h:link>
+                                <h:link outcome="/publicFiles/List" class="standardText">
+                                    <i class="fas fa-video"></i>&nbsp;Public Files
+                                </h:link>
 
                                 <!-- 
                                 ===============================================================
@@ -95,9 +102,7 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                 <c:choose>
                                     <c:when test="#{userController.isAdministrator() == true}"> 
 
-<!--                                        <h:commandLink action="#{surveyReportManager.init()}" class="standardText" >
-                                            <i class="fas fa-file-alt"></i>&nbsp;Generate Report
-                                        </h:commandLink>-->
+
                                         <h:link outcome="/userSurvey/SurveysReport" class="standardText">
                                             <i class="fas fa-pencil-alt"></i>&nbsp;Generate Report
                                         </h:link>
@@ -130,12 +135,12 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                         <c:choose>
                                             <c:when test="#{userController.isLoggedIn() == true}"> 
 
-                                                <h:link outcome="/userSurvey/TakeSurvey" class="standardText" >
-                                                    <i class="fas fa-pencil-alt"></i>&nbsp;Take Survey
+                                                <h:link outcome="/publicFiles/List" class="standardText" >
+                                                    <i class="fas fa-pencil-alt"></i>&nbsp;Public Files
                                                 </h:link>
 
-                                                <h:link outcome="/userSurvey/SurveysTaken" class="standardText" >
-                                                    <i class="fas fa-check"></i>&nbsp;Surveys Taken
+                                                <h:link outcome="/userFiles/List" class="standardText" >
+                                                    <i class="fas fa-check"></i>&nbsp; User Files
                                                 </h:link>
 
                                                 <!-- Clicking "My Account" displays the Profile.xhtml file -->
@@ -167,8 +172,8 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                                         <i class="fas fa-user-plus"></i>&nbsp;Create an Account
                                                     </h:link>
 
-                                                    <h:link outcome="/SignIn" class="standardText">
-                                                        <i class="fas fa-pencil-alt"></i>&nbsp;Take Survey
+                                                    <h:link outcome="/About" class="standardText">
+                                                        <i class="fas fa-pencil-alt"></i>&nbsp;About WeCommUnity
                                                     </h:link>
                                                 </c:when>
 

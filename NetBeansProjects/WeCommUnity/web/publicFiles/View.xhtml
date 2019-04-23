@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Created by Fatimah Alotaibi on 2018.08.08
+Copyright © 2018 Osman Balci. All rights reserved.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog width="60%" height="40%" id="PublicVideoViewDlg" widgetVar="PublicVideoViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewPublicVideoTitle}">
+            <h:form id="PublicVideoViewForm" style="width: 100%" styleClass="ui-noborder">
+
+                <h:panelGroup id="display">
+
+                    <p:panelGrid rendered="#{publicVideoController.selected != null}" style="width: 100%" styleClass="ui-noborder">
+                        <p:row style= "background-color: blanchedalmond">
+                            <p:column  class="panelGridCol2">
+                                <h:outputText value="#{bundle.ViewPublicVideoLabel_title}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{publicVideoController.selected.title}" title="#{bundle.ViewPublicVideoTitle_title}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <h:outputText value="#{bundle.ViewPublicVideoLabel_description}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{publicVideoController.selected.description}" title="#{bundle.ViewPublicVideoTitle_description}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <h:outputText value="#{bundle.ViewPublicVideoLabel_youtubeVideoId}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{publicVideoController.selected.youtubeVideoId}" title="#{bundle.ViewPublicVideoTitle_youtubeVideoId}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <h:outputText value="#{bundle.ViewPublicVideoLabel_duration}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{publicVideoController.selected.duration}" title="#{bundle.ViewPublicVideoTitle_duration}"/>
+                            </p:column  >
+                        </p:row> 
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <h:outputText value="#{bundle.ViewPublicVideoLabel_datePublished}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{publicVideoController.selected.datePublished}" title="#{bundle.ViewPublicVideoTitle_datePublished}">
+                                    <f:convertDateTime pattern="MM/dd/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                        </p:row> 
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <h:outputText value="#{bundle.ViewPublicVideoLabel_category}"/>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{publicVideoController.selected.category}" title="#{bundle.ViewPublicVideoTitle_category}"/>
+                            </p:column>
+                        </p:row> 
+                    </p:panelGrid>
+
+                </h:panelGroup>
+
+                <h:panelGroup>
+                    <br />
+                    <div align="center">
+                        <p:commandButton value="#{bundle.Close}" icon="fas fa-window-close" onclick="PublicVideoViewDialog.hide()"/>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

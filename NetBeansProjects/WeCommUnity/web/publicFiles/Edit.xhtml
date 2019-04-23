@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Created by Fatimah Alotaibi on 2018.08.08
+Copyright © 2018 Osman Balci. All rights reserved.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog width="60%" height="80%" id="PublicVideoEditDlg" widgetVar="PublicVideoEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditPublicVideoTitle}">
+            <h:form id="PublicVideoEditForm" style="width: 100%">
+                <h:panelGroup id="display">
+                    <p:panelGrid rendered="#{publicVideoController.selected != null}" style="width: 100%; background-color:red" styleClass="ui-noborder">
+                        <p:row style= "background-color: blanchedalmond">
+                            <p:column  class="panelGridCol2">
+                                <p:outputLabel value="#{bundle.EditPublicVideoLabel_title}" for="title"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="title" value="#{publicVideoController.selected.title}" title="#{bundle.EditPublicVideoTitle_title}" required="false" requiredMessage="#{bundle.EditPublicVideoRequiredMessage_title}" style="width: 100%"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <p:outputLabel value="#{bundle.EditPublicVideoLabel_description}" for="description"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="description" value="#{publicVideoController.selected.description}" title="#{bundle.EditPublicVideoTitle_description}" required="false" requiredMessage="#{bundle.EditPublicVideoRequiredMessage_description}" style="width: 100%"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <p:outputLabel value="#{bundle.EditPublicVideoLabel_youtubeVideoId}" for="youtubeVideoId" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="youtubeVideoId" value="#{publicVideoController.selected.youtubeVideoId}" title="#{bundle.EditPublicVideoTitle_youtubeVideoId}" required="false" requiredMessage="#{bundle.EditPublicVideoRequiredMessage_youtubeVideoId}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <p:outputLabel value="#{bundle.EditPublicVideoLabel_duration}" for="duration" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="duration" value="#{publicVideoController.selected.duration}" title="#{bundle.EditPublicVideoTitle_duration}" required="false" requiredMessage="#{bundle.EditPublicVideoRequiredMessage_duration}"/>
+                            </p:column>
+                        </p:row> 
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <p:outputLabel value="#{bundle.EditPublicVideoLabel_datePublished}" for="datePublished" />
+                            </p:column>
+                            <p:column>
+                                <p:calendar id="datePublished" pattern="MM/dd/yyyy" value="#{publicVideoController.selected.datePublished}" title="#{bundle.EditPublicVideoTitle_datePublished}" required="false" requiredMessage="#{bundle.EditPublicVideoRequiredMessage_datePublished}"/>
+                            </p:column>
+                        </p:row> 
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                                <p:outputLabel value="#{bundle.EditPublicVideoLabel_category}" for="category"/>
+                            </p:column>
+                            <p:column>
+                            <div>
+                                <h:outputText value="#{item.category}"/>
+                                <p:selectOneMenu id="category" value="#{publicVideoController.selected.category}"
+                                                 required="false" requiredMessage="Select Video Category" >
+                                    <f:selectItem itemLabel="Select Video Category"   itemValue="" />
+                                    <f:selectItem itemLabel="Cars and Vehicles" itemValue="Cars and Vehicles"/>
+                                    <f:selectItem itemLabel="Comedy"      itemValue="Comedy"/>
+                                    <f:selectItem itemLabel="Education" itemValue="Education"/>
+                                    <f:selectItem itemLabel="Entertainment" itemValue="Entertainment"/>
+                                    <f:selectItem itemLabel="Film and Animation" itemValue="Film and Animation"/>
+                                    <f:selectItem itemLabel="Gaming" itemValue="Gaming"/>
+                                    <f:selectItem itemLabel="How-to and Style" itemValue="How-to and Style"/>
+                                    <f:selectItem itemLabel="Music" itemValue="Music"/>
+                                    <f:selectItem itemLabel="News and Politics" itemValue="News and Politics"/>
+                                    <f:selectItem itemLabel="Non-profits and Activism" itemValue="Non-profits and Activism"/>
+                                    <f:selectItem itemLabel="People &and; Blogs" itemValue="People and Blogs"/>
+                                    <f:selectItem itemLabel="Pets and Animals" itemValue="Pets and Animals"/>
+                                    <f:selectItem itemLabel="Science and Technology" itemValue="Science and Technology"/>
+                                    <f:selectItem itemLabel="Sports" itemValue="Sports"/>
+                                    <f:selectItem itemLabel="Travel and Events" itemValue="Travel and Events"/>
+                                </p:selectOneMenu>
+                            </div>
+                            </p:column>
+                        </p:row> 
+                    </p:panelGrid>
+                </h:panelGroup>
+                <h:panelGroup>
+                    <br />
+                    <div align="center">
+                        <p:commandButton actionListener="#{publicVideoController.update}" value="#{bundle.Save}" icon="fas fa-save" update="display,:PublicVideoListForm:datalist,:growl" oncomplete="handleSubmit(args, 'PublicVideoEditDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" icon="fas fa-window-close" onclick="PublicVideoEditDialog.hide()"/>
+                    </div>
+                </h:panelGroup>
+
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

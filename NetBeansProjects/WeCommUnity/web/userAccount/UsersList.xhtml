@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Created by Fatimah Alotaibi on 2018.06.28
+Copyright © 2018 Osman Balci. All rights reserved.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <!-- Do not enter tags before the composition line since they are ignored by JSF -->
+
+    <!-- This page is constructed based on the siteTemplate -->
+    <ui:composition template="/template/siteTemplate.xhtml">
+
+        <ui:define name="title">
+            <!-- Set the page title -->
+            <h:outputText value="List of all Users"></h:outputText>
+        </ui:define>
+
+        <!-- Create the content for this page below -->
+        <ui:define name="editableContent">
+
+            <div align="center" style="width:97%">
+                <h1> List of all Users</h1>
+
+                <h:form id="UserListForm">
+
+                    <p:panel header="List of all Users">
+
+                        <!-- 
+                        Read about p:dataTable in PrimeFaces User Guide and learn about it.
+                        The table is displayed as sorted in the order of database Primary Key (id) values.
+                        -->
+
+                        <p:dataTable id="datalist" value="#{userController.items}" var="item"
+                                     selectionMode="single" selection="#{userController.selected}"
+                                     reflow="true"
+                                     paginator="true"
+                                     rowKey="#{item.id}"
+                                     rows="5"
+                                     rowsPerPageTemplate="5,10,15,20,30,40,50"
+                                     class="dataTable" >
+
+                            <p:ajax event="rowSelect"   update="viewButton"/>
+                            <p:ajax event="rowUnselect" update=" viewButton"/>
+
+                            <!--need to double check here
+                            ********************************
+                            *       USER PHOTO column      *
+                            ********************************
+-->                             
+                            <p:column headerText="User Photo" style="width:100px;">
+                                <div align="center">
+                                    
+                                    <h:graphicImage class="smallProfilePhoto" value="#{userController.usersListPhoto(item.getId())  }" />
+                                </div>
+                            </p:column>
+
+                            <!--
+                           ********************************
+                           *        First NAME column      *
+                           ********************************
+                            -->
+                            <p:column sortBy="#{item.firstName}" headerText="First Name" >
+                                <h:outputText value="#{item.getFirstName()}"/>
+                            </p:column>
+
+                            <!--
+                           ********************************
+                           *        First NAME column      *
+                           ********************************
+                            -->
+                            <p:column sortBy="#{item.lastName}" headerText="Last Name" >
+                                <h:outputText value="#{item.getLastName()}"/>
+                            </p:column>
+
+<!--double check here-->
+                            <!--
+                           ********************************
+                           *        Username column      *
+                           ********************************
+                            -->
+                            <p:column sortBy="#{item.username}" headerText="UserName" >
+                                <h:outputText value="#{item.getUsername()}"/>
+                            </p:column>
+                            
+                            <!-- 
+                            ****************************************
+                            *   FOOTER Section of the Data Table   *
+                            ****************************************
+                            -->
+                            <f:facet name="footer">
+
+                                <!-- 
+                                ==================
+                                VIEW (Read) Button
+                                ==================
+                                -->
+                                <p:commandButton id="viewButton"   icon="fas fa-eye" value="#{bundle.View}" 
+                                                 update="UserViewForm" 
+                                                 oncomplete="PF('UserViewDialog').show()" 
+                                                 disabled="#{empty userController.selected}"/>
+<!--                                             onclick="#{userController.selected=null}"-->
+
+
+                            </f:facet>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+
+               
+                <!-- Clicking the View button displays the included View.xhtml file in a dialog window on top of this page. -->
+                <ui:include src="/userAccount/View.xhtml"/>
+            </div>
+        </ui:define>
+
+    </ui:composition>
+
+</html>
+

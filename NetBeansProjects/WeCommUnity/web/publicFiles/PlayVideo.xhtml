@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Created by Fatimah Alotaibi on 2018.08.08
+Copyright © 2018 Osman Balci. All rights reserved.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+      
+        <p:dialog id="PublicVideoPlayDialog" widgetVar="PublicVideoPlayDialog" modal="true" resizable="false" appendTo="@(body)" header="Play Video">
+            <h:form id="PublicVideoPlayForm">
+                
+                <h:panelGroup id="display" styleClass="scalableVideo">
+                    <p:panelGrid columns="2" rendered="#{publicVideoController.selected != null}" styleClass="ui-noborder">
+                        <div position="relative" overflow="hidden" padding-top="56.25%">
+                        <iframe  border="0" width="1100" height="500"  top="0" left="0" src="https://www.youtube.com/embed/#{publicVideoController.selected.youtubeVideoId}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" styleClass="scalableVideo" ></iframe>
+                   </div>
+                    </p:panelGrid>
+                    <div align="center">
+                    <p:commandButton value="Close"  icon="fas fa-window-close"  onclick="PublicVideoPlayDialog.hide()"/>
+                    </div>
+                </h:panelGroup>
+                
+            </h:form>
+        </p:dialog>
+            
+    </ui:composition>
+</html>

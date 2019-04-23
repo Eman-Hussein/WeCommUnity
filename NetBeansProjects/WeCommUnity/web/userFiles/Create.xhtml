@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog width="60%" height="80%"  id="UserVideoCreateDlg" widgetVar="UserVideoCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateUserVideoTitle}">
+            <h:form id="UserVideoCreateForm" style="width: 100%">
+                <h:panelGroup id="display">
+                    <p:panelGrid rendered="#{userVideoController.selected != null}" style="width: 100%; background-color:red" styleClass="ui-noborder">
+                        <p:row style= "background-color: blanchedalmond">
+                            <p:column class="panelGridCol2">
+                        <p:outputLabel value="#{bundle.CreateUserVideoLabel_title}" for="title" />
+                         </p:column>
+                            <p:column>
+                                <p:inputText id="title" value="#{userVideoController.selected.title}" title="#{bundle.CreateUserVideoTitle_title}" required="true" requiredMessage="#{bundle.CreateUserVideoRequiredMessage_title}" style="width: 100%"/>
+                         </p:column>
+                        </p:row>
+                        <p:row style="background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                        <p:outputLabel value="#{bundle.CreateUserVideoLabel_description}" for="description" />
+                         </p:column>
+                            <p:column>
+                        <p:inputText id="description" value="#{userVideoController.selected.description}" title="#{bundle.CreateUserVideoTitle_description}" required="true" requiredMessage="#{bundle.CreateUserVideoRequiredMessage_description}" style="width: 100%"/>
+                         </p:column>
+                        </p:row>
+                        <p:row style="background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                        <p:outputLabel value="#{bundle.CreateUserVideoLabel_youtubeVideoId}" for="youtubeVideoId" />
+                        </p:column>
+                            <p:column>
+                        <p:inputText id="youtubeVideoId" value="#{userVideoController.selected.youtubeVideoId}" title="#{bundle.CreateUserVideoTitle_youtubeVideoId}" required="true" requiredMessage="#{bundle.CreateUserVideoRequiredMessage_youtubeVideoId}"/>
+                         </p:column>
+                        </p:row>
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                        <p:outputLabel value="#{bundle.CreateUserVideoLabel_duration}" for="duration" />
+                        </p:column>
+                            <p:column>
+                        <p:inputText id="duration" value="#{userVideoController.selected.duration}" title="#{bundle.CreateUserVideoTitle_duration}" required="true" requiredMessage="#{bundle.CreateUserVideoRequiredMessage_duration}"/>
+                        </p:column  >
+                        </p:row> 
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                        <p:outputLabel value="#{bundle.CreateUserVideoLabel_datePublished}" for="datePublished" />
+                        </p:column>
+                            <p:column>
+                        <p:calendar id="datePublished" pattern="MM/dd/yyyy" value="#{userVideoController.selected.datePublished}" title="#{bundle.EditUserVideoTitle_datePublished}" required="true" requiredMessage="#{bundle.EditUserVideoRequiredMessage_datePublished}"/>
+                        </p:column>
+                        </p:row> 
+                        
+                        <p:row style= "background-color: blanchedalmond"> 
+                            <p:column class="panelGridCol2">
+                        <p:outputLabel value="#{bundle.CreateUserVideoLabel_category}" for="category" />
+                         </p:column>
+                            <p:column>
+                            <div>
+                                <h:outputText value="#{item.category}"/>
+                                <p:selectOneMenu id="category" value="#{userVideoController.selected.category}"
+                                                 required="false" requiredMessage="Select Video Category" >
+                                    <f:selectItem itemLabel="Select Video Category"   itemValue="" />
+                                    <f:selectItem itemLabel="Cars and Vehicles" itemValue="Cars and Vehicles"/>
+                                    <f:selectItem itemLabel="Comedy"      itemValue="Comedy"/>
+                                    <f:selectItem itemLabel="Education" itemValue="Education"/>
+                                    <f:selectItem itemLabel="Entertainment" itemValue="Entertainment"/>
+                                    <f:selectItem itemLabel="Film and Animation" itemValue="Film and Animation"/>
+                                    <f:selectItem itemLabel="Gaming" itemValue="Gaming"/>
+                                    <f:selectItem itemLabel="How-to and Style" itemValue="How-to and Style"/>
+                                    <f:selectItem itemLabel="Music" itemValue="Music"/>
+                                    <f:selectItem itemLabel="News and Politics" itemValue="News and Politics"/>
+                                    <f:selectItem itemLabel="Non-profits and Activism" itemValue="Non-profits and Activism"/>
+                                    <f:selectItem itemLabel="People &and; Blogs" itemValue="People and Blogs"/>
+                                    <f:selectItem itemLabel="Pets and Animals" itemValue="Pets and Animals"/>
+                                    <f:selectItem itemLabel="Science and Technology" itemValue="Science and Technology"/>
+                                    <f:selectItem itemLabel="Sports" itemValue="Sports"/>
+                                    <f:selectItem itemLabel="Travel and Events" itemValue="Travel and Events"/>
+                                </p:selectOneMenu>
+                            </div>
+                            </p:column>
+                        </p:row> 
+                        
+                    </p:panelGrid>
+                     </h:panelGroup>
+                <h:panelGroup>
+                    <br />
+                    <div align="center">
+                        <p:commandButton actionListener="#{userVideoController.create}" value="Create" icon="fas fa-plus" update="display,:UserVideoListForm:datalist,:growl" oncomplete="#{publicVideoController.create()}" onclick="UserVideoCreateDialog.hide()"/>
+                    <p:commandButton value="#{bundle.Cancel}" icon="fas fa-window-close" onclick="UserVideoCreateDialog.hide()"/>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Created by Fatimah Alotaibi on 2019.03.20
+Copyright © 2018 Osman Balci. All rights reserved.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+
+        <!-- 
+        ===========================================================================
+        |  Selecting the Video SEARCH menu option displays this Dialog window   |
+        ===========================================================================
+        -->
+        <p:dialog position="center center" id="VideoSearchDlg" widgetVar="VideoSearchDialog" 
+                  modal="true" resizable="false" appendTo="@(body)" header="Search Public Videos" >
+            <h:form id="VideoSearchForm">
+                <p:panel>                
+                    <h:panelGrid columns="4">
+                        <h:outputLabel value="Search: " />
+                        <p:inputText id="searchString" value="#{publicVideoController.searchString}" 
+                                     required="true" requiredMessage="Please Enter a Search String!"
+                                     placeholder="Enter search string" >
+                            <f:validateLength minimum="2" />
+                        </p:inputText>
+
+
+                        <!-- Search category is selected here. -->
+                        <p:selectOneMenu id="searchField" value="#{publicVideoController.searchField}"
+                                         required="true" requiredMessage="Select Category!" >
+                            <f:selectItem itemLabel="Select Category" itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="All"   itemValue="" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Video Title" itemValue="Video Title"/>
+                            <f:selectItem itemLabel="Video Description" itemValue="Video Description"/>
+                            <f:selectItem itemLabel="Video Category" itemValue="Video Category"/>
+                        </p:selectOneMenu>
+
+                    </h:panelGrid>
+
+                    <h:panelGroup>
+                        <div align="center" style="margin-bottom: 10px;">
+                            <!--
+                            Show the Results page while executing the performSearch() method of the backing bean.
+                            We cannot redirect to show the Results page from the backing bean because:
+                            
+                                (1) This commandButton submits the JSF Request.
+                                (2) Processing of the Request produces Request-Response cycle to obtain the JSON file from the API.
+                                (3) The Response for the first Request is lost.
+                            
+                            Therefore, we redirect to show the Results page on the client side as follows.
+                            The Results page will place a GET Request to get its values from the backing bean's properties.
+                            -->
+                            <p:commandButton value="Search" icon="fas fa-search" action="#{publicVideoController.search()}" ajax="false"/>
+                            &nbsp;
+                            <!-- CANCEL button -->
+                            <p:commandButton value="Cancel" onclick="PF('VideoSearchDialog').hide()"    
+                                             icon="fas fa-ban" immediate="true" />
+                        </div>
+                    </h:panelGroup>
+
+                </p:panel>
+            </h:form> 
+
+        </p:dialog>
+
+    </ui:composition>
+</html>

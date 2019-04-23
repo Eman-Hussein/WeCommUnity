@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Created by Fatimah Alotaibi on 2018.08.08
+Copyright © 2018 Osman Balci. All rights reserved.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:composition>
+        <p:confirmDialog  id= "confirmDlg"  closable="true"  header="Share Confirmation" widgetVar="confirmDlg"  message="Are you sure you want to add the selected video to the Signed-In Users' List of favorite Youtube Vidoes" >
+
+            <h:form id="PublicVideoShareForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{publicVideoController.selected != null}">
+
+                    </p:panelGrid>
+                    <p:commandButton value="No"  icon="fas fa-times-circle" onclick="PublicVideoShareDialog.hide()"/>
+                    <p:commandButton value="Yes" type="button"  icon="fas fa-check-square"  immediate="true" onclick="#{userController.isLoggedIn()}"> 
+                        
+                    
+                    </p:commandButton>  
+                    
+                  
+                </h:panelGroup>
+            </h:form>
+        </p:confirmDialog>
+    </ui:composition>
+</html>
