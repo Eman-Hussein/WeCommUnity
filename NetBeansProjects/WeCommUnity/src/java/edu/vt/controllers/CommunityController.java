@@ -4,6 +4,7 @@ import edu.vt.EntityBeans.Community;
 import edu.vt.controllers.util.JsfUtil;
 import edu.vt.controllers.util.JsfUtil.PersistAction;
 import edu.vt.FacadeBeans.CommunityFacade;
+import edu.vt.globals.Methods;
 
 import java.io.Serializable;
 import java.util.List;
@@ -24,29 +25,77 @@ import javax.faces.convert.FacesConverter;
 public class CommunityController implements Serializable {
 
     @EJB
-    private edu.vt.FacadeBeans.CommunityFacade ejbFacade;
-    private List<Community> items = null;
+    private edu.vt.FacadeBeans.CommunityFacade communityFacade;
+    private List<Community> userCommunitiesList = null;
+    private List<Community> allCommunitiesList = null;
     private Community selected;
 
-    public CommunityController() {
+    /**
+     * ************************************************************************************
+     */
+    public void setCommunityFacade(CommunityFacade cFacade) {
+        this.communityFacade = cFacade;
     }
 
+    private CommunityFacade getCommunityFacade() {
+        return communityFacade;
+    }
+
+    /**
+     * ************************************************************************************
+     */
+    public void setUserCommunitiesList(List<Community> userCommunitiesList) {
+        this.userCommunitiesList = userCommunitiesList;
+    }
+
+    //need to get the user id to retrieve the communities he/she joined
+    public List<Community> getuserCommunitiesList() {
+        if (userCommunitiesList == null) {
+             /*
+            user_id (database primary key) was put into the SessionMap in the
+            initializeSessionMap() method in LoginManager upon user's sign in.
+             */
+            int userPrimaryKey = (int) Methods.sessionMap().get("user_id");
+
+            userCommunitiesList = getCommunityFacade().findUserCommunitiesByUserPrimaryKey(userPrimaryKey);
+        }
+        return userCommunitiesList;
+    }
+
+    /**
+     * ************************************************************************************
+     */
+    public void setAllCommunitiesList(List<Community> allCommunitiesList) {
+        this.allCommunitiesList = allCommunitiesList;
+    }
+
+    public List<Community> getAllCommunitiesList() {
+        if (allCommunitiesList == null) {
+            allCommunitiesList = getCommunityFacade().findAll();
+        }
+        return allCommunitiesList;
+    }
+
+    /**
+     * ************************************************************************************
+     */
     public Community getSelected() {
         return selected;
     }
-
     public void setSelected(Community selected) {
         this.selected = selected;
+    }
+
+    /**
+     * ************************************************************************************
+     */
+    public CommunityController() {
     }
 
     protected void setEmbeddableKeys() {
     }
 
     protected void initializeEmbeddableKey() {
-    }
-
-    private CommunityFacade getFacade() {
-        return ejbFacade;
     }
 
     public Community prepareCreate() {
@@ -58,7 +107,7 @@ public class CommunityController implements Serializable {
     public void create() {
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CommunityCreated"));
         if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+            userCommunitiesList = null;    // Invalidate list of userCommunitiesList to trigger re-query.
         }
     }
 
@@ -70,15 +119,8 @@ public class CommunityController implements Serializable {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CommunityDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
+            userCommunitiesList = null;    // Invalidate list of userCommunitiesList to trigger re-query.
         }
-    }
-
-    public List<Community> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
-        return items;
     }
 
     private void persist(PersistAction persistAction, String successMessage) {
@@ -86,9 +128,9 @@ public class CommunityController implements Serializable {
             setEmbeddableKeys();
             try {
                 if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
+                    getCommunityFacade().edit(selected);
                 } else {
-                    getFacade().remove(selected);
+                    getCommunityFacade().remove(selected);
                 }
                 JsfUtil.addSuccessMessage(successMessage);
             } catch (EJBException ex) {
@@ -110,15 +152,15 @@ public class CommunityController implements Serializable {
     }
 
     public Community getCommunity(java.lang.Integer id) {
-        return getFacade().find(id);
+        return getCommunityFacade().find(id);
     }
 
-    public List<Community> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
+    public List<Community> getuserCommunitiesListAvailableSelectMany() {
+        return getCommunityFacade().findAll();
     }
 
-    public List<Community> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
+    public List<Community> getuserCommunitiesListAvailableSelectOne() {
+        return getCommunityFacade().findAll();
     }
 
     @FacesConverter(forClass = Community.class)

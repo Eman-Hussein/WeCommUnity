@@ -16,7 +16,7 @@
         <ui:define name="body">
             <h:form id="CommunityListForm">
                 <p:panel header="#{bundle.ListCommunityTitle}">
-                    <p:dataTable id="datalist" value="#{communityController.items}" var="item"
+                    <p:dataTable id="datalist" value="#{communityController.allCommunitiesList}" var="item"
                                  selectionMode="single" selection="#{communityController.selected}"
                                  paginator="true"
                                  rowKey="#{item.id}"
