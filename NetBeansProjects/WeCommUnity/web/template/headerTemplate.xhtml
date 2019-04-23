@@ -86,6 +86,13 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                 <h:link outcome="/index" class="standardText">
                                     <i class="fas fa-home"></i>&nbsp;Home
                                 </h:link>
+                                <h:link outcome="/community/List" class="standardText">
+                                    <i class="fas fa-home"></i>&nbsp;Communities 
+                                </h:link>
+                                <h:link outcome="/publicContent/List" class="standardText">
+                                    <i class="fas fa-home"></i>&nbsp;Contents
+                                </h:link>
+                                
 
                                 <!-- 
                                 ===============================================================
@@ -130,14 +137,16 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                         <c:choose>
                                             <c:when test="#{userController.isLoggedIn() == true}"> 
 
-                                                <h:link outcome="/userSurvey/TakeSurvey" class="standardText" >
-                                                    <i class="fas fa-pencil-alt"></i>&nbsp;Take Survey
+                                                <h:link outcome="/userContent/List" class="standardText" >
+                                                    <i class="fas fa-pencil-alt"></i>&nbsp;Your Content
                                                 </h:link>
-
-                                                <h:link outcome="/userSurvey/SurveysTaken" class="standardText" >
-                                                    <i class="fas fa-check"></i>&nbsp;Surveys Taken
+                                                
+<!--
+Check this with Eman
+                                                <h:link outcome="/userContent/" class="standardText" >
+                                                    <i class="fas fa-check"></i>&nbsp;Contribute 
                                                 </h:link>
-
+-->
                                                 <!-- Clicking "My Account" displays the Profile.xhtml file -->
                                                 <h:link outcome="/userAccount/UserProfile" class="standardText">
                                                     <!-- 
@@ -167,8 +176,8 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                                         <i class="fas fa-user-plus"></i>&nbsp;Create an Account
                                                     </h:link>
 
-                                                    <h:link outcome="/SignIn" class="standardText">
-                                                        <i class="fas fa-pencil-alt"></i>&nbsp;Take Survey
+                                                    <h:link outcome="/About" class="standardText">
+                                                        <i class="fas fa-pencil-alt"></i>&nbsp;About We CommUnity
                                                     </h:link>
                                                 </c:when>
 
