@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PublicContentCreateDlg" widgetVar="PublicContentCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatePublicContentTitle}">
+            <h:form id="PublicContentCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{publicContentController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreatePublicContentLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{publicContentController.selected.id}" title="#{bundle.CreatePublicContentTitle_id}" required="true" requiredMessage="#{bundle.CreatePublicContentRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreatePublicContentLabel_publicContentame}" for="publicContentame" />
+                        <p:inputText id="publicContentame" value="#{publicContentController.selected.publicContentame}" title="#{bundle.CreatePublicContentTitle_publicContentame}" required="true" requiredMessage="#{bundle.CreatePublicContentRequiredMessage_publicContentame}"/>
+                        <p:outputLabel value="#{bundle.CreatePublicContentLabel_dateEntered}" for="dateEntered" />
+                        <p:calendar id="dateEntered" pattern="MM/dd/yyyy" value="#{publicContentController.selected.dateEntered}" title="#{bundle.EditPublicContentTitle_dateEntered}" required="true" requiredMessage="#{bundle.EditPublicContentRequiredMessage_dateEntered}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreatePublicContentLabel_category}" for="category" />
+                        <p:inputText id="category" value="#{publicContentController.selected.category}" title="#{bundle.CreatePublicContentTitle_category}" required="true" requiredMessage="#{bundle.CreatePublicContentRequiredMessage_category}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{publicContentController.create}" value="#{bundle.Save}" update="display,:PublicContentListForm:datalist,:growl" oncomplete="handleSubmit(args,'PublicContentCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PublicContentCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

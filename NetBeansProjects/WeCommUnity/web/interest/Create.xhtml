@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="InterestCreateDlg" widgetVar="InterestCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateInterestTitle}">
+            <h:form id="InterestCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{interestController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateInterestLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{interestController.selected.id}" title="#{bundle.CreateInterestTitle_id}" required="true" requiredMessage="#{bundle.CreateInterestRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateInterestLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{interestController.selected.name}" title="#{bundle.CreateInterestTitle_name}" required="true" requiredMessage="#{bundle.CreateInterestRequiredMessage_name}"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{interestController.create}" value="#{bundle.Save}" update="display,:InterestListForm:datalist,:growl" oncomplete="handleSubmit(args,'InterestCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="InterestCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="UserContentEditDlg" widgetVar="UserContentEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditUserContentTitle}">
+            <h:form id="UserContentEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{userContentController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditUserContentLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{userContentController.selected.id}" title="#{bundle.EditUserContentTitle_id}" required="true" requiredMessage="#{bundle.EditUserContentRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditUserContentLabel_contentname}" for="contentname" />
+                        <p:inputText id="contentname" value="#{userContentController.selected.contentname}" title="#{bundle.EditUserContentTitle_contentname}" required="true" requiredMessage="#{bundle.EditUserContentRequiredMessage_contentname}"/>
+                        <p:outputLabel value="#{bundle.EditUserContentLabel_dateEntered}" for="dateEntered" />
+                        <p:calendar id="dateEntered" pattern="MM/dd/yyyy" value="#{userContentController.selected.dateEntered}" title="#{bundle.EditUserContentTitle_dateEntered}" required="true" requiredMessage="#{bundle.EditUserContentRequiredMessage_dateEntered}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditUserContentLabel_category}" for="category" />
+                        <p:inputText id="category" value="#{userContentController.selected.category}" title="#{bundle.EditUserContentTitle_category}" required="true" requiredMessage="#{bundle.EditUserContentRequiredMessage_category}"/>
+                        <p:outputLabel value="#{bundle.EditUserContentLabel_type}" for="type" />
+                        <p:inputText id="type" value="#{userContentController.selected.type}" title="#{bundle.EditUserContentTitle_type}" />
+                        <p:outputLabel value="#{bundle.EditUserContentLabel_location}" for="location" />
+                        <p:inputText id="location" value="#{userContentController.selected.location}" title="#{bundle.EditUserContentTitle_location}" />
+                        <p:outputLabel value="#{bundle.EditUserContentLabel_creatorId}" for="creatorId" />
+                        <p:selectOneMenu id="creatorId" value="#{userContentController.selected.creatorId}" required="true" requiredMessage="#{bundle.EditUserContentRequiredMessage_creatorId}">
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{member1Controller.itemsAvailableSelectOne}"
+                                           var="creatorIdItem"
+                                           itemValue="#{creatorIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{userContentController.update}" value="#{bundle.Save}" update="display,:UserContentListForm:datalist,:growl" oncomplete="handleSubmit(args, 'UserContentEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="UserContentEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

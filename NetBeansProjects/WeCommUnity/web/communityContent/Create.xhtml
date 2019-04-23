@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CommunityContentCreateDlg" widgetVar="CommunityContentCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCommunityContentTitle}">
+            <h:form id="CommunityContentCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{communityContentController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateCommunityContentLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{communityContentController.selected.id}" title="#{bundle.CreateCommunityContentTitle_id}" required="true" requiredMessage="#{bundle.CreateCommunityContentRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateCommunityContentLabel_contentname}" for="contentname" />
+                        <p:inputText id="contentname" value="#{communityContentController.selected.contentname}" title="#{bundle.CreateCommunityContentTitle_contentname}" required="true" requiredMessage="#{bundle.CreateCommunityContentRequiredMessage_contentname}"/>
+                        <p:outputLabel value="#{bundle.CreateCommunityContentLabel_dateEntered}" for="dateEntered" />
+                        <p:calendar id="dateEntered" pattern="MM/dd/yyyy" value="#{communityContentController.selected.dateEntered}" title="#{bundle.EditCommunityContentTitle_dateEntered}" required="true" requiredMessage="#{bundle.EditCommunityContentRequiredMessage_dateEntered}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateCommunityContentLabel_category}" for="category" />
+                        <p:inputText id="category" value="#{communityContentController.selected.category}" title="#{bundle.CreateCommunityContentTitle_category}" required="true" requiredMessage="#{bundle.CreateCommunityContentRequiredMessage_category}"/>
+                        <p:outputLabel value="#{bundle.CreateCommunityContentLabel_communityId}" for="communityId" />
+                        <p:selectOneMenu id="communityId" value="#{communityContentController.selected.communityId}" >
+                            <f:selectItems value="#{communityController.itemsAvailableSelectOne}"
+                                           var="communityIdItem"
+                                           itemValue="#{communityIdItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{communityContentController.create}" value="#{bundle.Save}" update="display,:CommunityContentListForm:datalist,:growl" oncomplete="handleSubmit(args,'CommunityContentCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="CommunityContentCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
