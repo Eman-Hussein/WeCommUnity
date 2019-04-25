@@ -3,32 +3,46 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:composition>
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewCommunityContentTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewCommunityContentLabel_id}"/>
+                    <h:outputText value="#{communityContentController.selected.id}" title="#{bundle.ViewCommunityContentTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewCommunityContentLabel_contentname}"/>
+                    <h:outputText value="#{communityContentController.selected.contentname}" title="#{bundle.ViewCommunityContentTitle_contentname}"/>
+                    <h:outputText value="#{bundle.ViewCommunityContentLabel_dateEntered}"/>
+                    <h:outputText value="#{communityContentController.selected.dateEntered}" title="#{bundle.ViewCommunityContentTitle_dateEntered}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewCommunityContentLabel_category}"/>
+                    <h:outputText value="#{communityContentController.selected.category}" title="#{bundle.ViewCommunityContentTitle_category}"/>
+                    <h:outputText value="#{bundle.ViewCommunityContentLabel_communityId}"/>
+                    <h:outputText value="#{communityContentController.selected.communityId}" title="#{bundle.ViewCommunityContentTitle_communityId}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{communityContentController.destroyAndView}" value="#{bundle.ViewCommunityContentDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewCommunityContentEditLink}"/>
+                <br />
+                <h:commandLink action="#{communityContentController.prepareCreate}" value="#{bundle.ViewCommunityContentCreateLink}" />
+                <br />
+                <h:commandLink action="#{communityContentController.prepareList}" value="#{bundle.ViewCommunityContentShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewCommunityContentIndexLink}"/>
 
-        <p:dialog id="CommunityContentViewDlg" widgetVar="CommunityContentViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewCommunityContentTitle}">
-            <h:form id="CommunityContentViewForm">
-                <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{communityContentController.selected != null}">
-                        <h:outputText value="#{bundle.ViewCommunityContentLabel_id}"/>
-                        <h:outputText value="#{communityContentController.selected.id}" title="#{bundle.ViewCommunityContentTitle_id}"/>
-                        <h:outputText value="#{bundle.ViewCommunityContentLabel_contentname}"/>
-                        <h:outputText value="#{communityContentController.selected.contentname}" title="#{bundle.ViewCommunityContentTitle_contentname}"/>
-                        <h:outputText value="#{bundle.ViewCommunityContentLabel_dateEntered}"/>
-                        <h:outputText value="#{communityContentController.selected.dateEntered}" title="#{bundle.ViewCommunityContentTitle_dateEntered}">
-                            <f:convertDateTime pattern="MM/dd/yyyy" />
-                        </h:outputText>
-                        <h:outputText value="#{bundle.ViewCommunityContentLabel_category}"/>
-                        <h:outputText value="#{communityContentController.selected.category}" title="#{bundle.ViewCommunityContentTitle_category}"/>
-                        <h:outputText value="#{bundle.ViewCommunityContentLabel_communityId}"/>
-                        <h:outputText value="#{communityContentController.selected.communityId}" title="#{bundle.ViewCommunityContentTitle_communityId}"/>
-                    </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="CommunityContentViewDialog.hide()"/>
-                </h:panelGroup>
             </h:form>
-        </p:dialog>
-
+        </ui:define>
     </ui:composition>
+
 </html>

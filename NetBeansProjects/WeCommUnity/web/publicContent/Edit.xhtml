@@ -3,29 +3,40 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:composition>
-
-        <p:dialog id="PublicContentEditDlg" widgetVar="PublicContentEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditPublicContentTitle}">
-            <h:form id="PublicContentEditForm">
-                <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{publicContentController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditPublicContentLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{publicContentController.selected.id}" title="#{bundle.EditPublicContentTitle_id}" required="true" requiredMessage="#{bundle.EditPublicContentRequiredMessage_id}"/>
-                        <p:outputLabel value="#{bundle.EditPublicContentLabel_publicContentame}" for="publicContentame" />
-                        <p:inputText id="publicContentame" value="#{publicContentController.selected.publicContentame}" title="#{bundle.EditPublicContentTitle_publicContentame}" required="true" requiredMessage="#{bundle.EditPublicContentRequiredMessage_publicContentame}"/>
-                        <p:outputLabel value="#{bundle.EditPublicContentLabel_dateEntered}" for="dateEntered" />
-                        <p:calendar id="dateEntered" pattern="MM/dd/yyyy" value="#{publicContentController.selected.dateEntered}" title="#{bundle.EditPublicContentTitle_dateEntered}" required="true" requiredMessage="#{bundle.EditPublicContentRequiredMessage_dateEntered}" showOn="button"/>
-                        <p:outputLabel value="#{bundle.EditPublicContentLabel_category}" for="category" />
-                        <p:inputText id="category" value="#{publicContentController.selected.category}" title="#{bundle.EditPublicContentTitle_category}" required="true" requiredMessage="#{bundle.EditPublicContentRequiredMessage_category}"/>
-                    </p:panelGrid>
-                    <p:commandButton actionListener="#{publicContentController.update}" value="#{bundle.Save}" update="display,:PublicContentListForm:datalist,:growl" oncomplete="handleSubmit(args, 'PublicContentEditDialog');"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="PublicContentEditDialog.hide()"/>
-                </h:panelGroup>
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditPublicContentTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditPublicContentLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{publicContentController.selected.id}" title="#{bundle.EditPublicContentTitle_id}" required="true" requiredMessage="#{bundle.EditPublicContentRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.EditPublicContentLabel_publicContentame}" for="publicContentame" />
+                    <h:inputText id="publicContentame" value="#{publicContentController.selected.publicContentame}" title="#{bundle.EditPublicContentTitle_publicContentame}" required="true" requiredMessage="#{bundle.EditPublicContentRequiredMessage_publicContentame}"/>
+                    <h:outputLabel value="#{bundle.EditPublicContentLabel_dateEntered}" for="dateEntered" />
+                    <h:inputText id="dateEntered" value="#{publicContentController.selected.dateEntered}" title="#{bundle.EditPublicContentTitle_dateEntered}" required="true" requiredMessage="#{bundle.EditPublicContentRequiredMessage_dateEntered}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:inputText>
+                    <h:outputLabel value="#{bundle.EditPublicContentLabel_category}" for="category" />
+                    <h:inputText id="category" value="#{publicContentController.selected.category}" title="#{bundle.EditPublicContentTitle_category}" required="true" requiredMessage="#{bundle.EditPublicContentRequiredMessage_category}"/>
+                </h:panelGrid>
+                <h:commandLink action="#{publicContentController.update}" value="#{bundle.EditPublicContentSaveLink}"/>
+                <br />
+                <br />
+                <h:link outcome="View" value="#{bundle.EditPublicContentViewLink}"/>
+                <br />
+                <h:commandLink action="#{publicContentController.prepareList}" value="#{bundle.EditPublicContentShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.EditPublicContentIndexLink}" />
             </h:form>
-        </p:dialog>
-
+        </ui:define>
     </ui:composition>
+
 </html>

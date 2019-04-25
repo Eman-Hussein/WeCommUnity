@@ -3,34 +3,48 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:composition>
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewMessageTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewMessageLabel_id}"/>
+                    <h:outputText value="#{messageController.selected.id}" title="#{bundle.ViewMessageTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewMessageLabel_subject}"/>
+                    <h:outputText value="#{messageController.selected.subject}" title="#{bundle.ViewMessageTitle_subject}"/>
+                    <h:outputText value="#{bundle.ViewMessageLabel_body}"/>
+                    <h:outputText value="#{messageController.selected.body}" title="#{bundle.ViewMessageTitle_body}"/>
+                    <h:outputText value="#{bundle.ViewMessageLabel_timestamp}"/>
+                    <h:outputText value="#{messageController.selected.timestamp}" title="#{bundle.ViewMessageTitle_timestamp}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewMessageLabel_senderId}"/>
+                    <h:outputText value="#{messageController.selected.senderId}" title="#{bundle.ViewMessageTitle_senderId}"/>
+                    <h:outputText value="#{bundle.ViewMessageLabel_recipientId}"/>
+                    <h:outputText value="#{messageController.selected.recipientId}" title="#{bundle.ViewMessageTitle_recipientId}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{messageController.destroyAndView}" value="#{bundle.ViewMessageDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewMessageEditLink}"/>
+                <br />
+                <h:commandLink action="#{messageController.prepareCreate}" value="#{bundle.ViewMessageCreateLink}" />
+                <br />
+                <h:commandLink action="#{messageController.prepareList}" value="#{bundle.ViewMessageShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewMessageIndexLink}"/>
 
-        <p:dialog id="MessageViewDlg" widgetVar="MessageViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewMessageTitle}">
-            <h:form id="MessageViewForm">
-                <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{messageController.selected != null}">
-                        <h:outputText value="#{bundle.ViewMessageLabel_id}"/>
-                        <h:outputText value="#{messageController.selected.id}" title="#{bundle.ViewMessageTitle_id}"/>
-                        <h:outputText value="#{bundle.ViewMessageLabel_subject}"/>
-                        <h:outputText value="#{messageController.selected.subject}" title="#{bundle.ViewMessageTitle_subject}"/>
-                        <h:outputText value="#{bundle.ViewMessageLabel_body}"/>
-                        <h:outputText value="#{messageController.selected.body}" title="#{bundle.ViewMessageTitle_body}"/>
-                        <h:outputText value="#{bundle.ViewMessageLabel_timestamp}"/>
-                        <h:outputText value="#{messageController.selected.timestamp}" title="#{bundle.ViewMessageTitle_timestamp}">
-                            <f:convertDateTime pattern="MM/dd/yyyy" />
-                        </h:outputText>
-                        <h:outputText value="#{bundle.ViewMessageLabel_senderId}"/>
-                        <h:outputText value="#{messageController.selected.senderId}" title="#{bundle.ViewMessageTitle_senderId}"/>
-                        <h:outputText value="#{bundle.ViewMessageLabel_recipientId}"/>
-                        <h:outputText value="#{messageController.selected.recipientId}" title="#{bundle.ViewMessageTitle_recipientId}"/>
-                    </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="MessageViewDialog.hide()"/>
-                </h:panelGroup>
             </h:form>
-        </p:dialog>
-
+        </ui:define>
     </ui:composition>
+
 </html>

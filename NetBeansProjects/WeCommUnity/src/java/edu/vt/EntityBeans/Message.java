@@ -63,10 +63,10 @@ public class Message implements Serializable {
     private Date timestamp;
     @JoinColumn(name = "sender_id", referencedColumnName = "id")
     @ManyToOne
-    private Member1 senderId;
+    private User senderId;
     @JoinColumn(name = "recipient_id", referencedColumnName = "id")
     @ManyToOne
-    private Member1 recipientId;
+    private User recipientId;
 
     public Message() {
     }
@@ -114,19 +114,19 @@ public class Message implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Member1 getSenderId() {
+    public User getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(Member1 senderId) {
+    public void setSenderId(User senderId) {
         this.senderId = senderId;
     }
 
-    public Member1 getRecipientId() {
+    public User getRecipientId() {
         return recipientId;
     }
 
-    public void setRecipientId(Member1 recipientId) {
+    public void setRecipientId(User recipientId) {
         this.recipientId = recipientId;
     }
 

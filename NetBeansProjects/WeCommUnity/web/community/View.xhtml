@@ -3,30 +3,44 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:composition>
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewCommunityTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewCommunityLabel_id}"/>
+                    <h:outputText value="#{communityController.selected.id}" title="#{bundle.ViewCommunityTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewCommunityLabel_communityname}"/>
+                    <h:outputText value="#{communityController.selected.communityname}" title="#{bundle.ViewCommunityTitle_communityname}"/>
+                    <h:outputText value="#{bundle.ViewCommunityLabel_city}"/>
+                    <h:outputText value="#{communityController.selected.city}" title="#{bundle.ViewCommunityTitle_city}"/>
+                    <h:outputText value="#{bundle.ViewCommunityLabel_state}"/>
+                    <h:outputText value="#{communityController.selected.state}" title="#{bundle.ViewCommunityTitle_state}"/>
+                    <h:outputText value="#{bundle.ViewCommunityLabel_description}"/>
+                    <h:outputText value="#{communityController.selected.description}" title="#{bundle.ViewCommunityTitle_description}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{communityController.destroyAndView}" value="#{bundle.ViewCommunityDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewCommunityEditLink}"/>
+                <br />
+                <h:commandLink action="#{communityController.prepareCreate}" value="#{bundle.ViewCommunityCreateLink}" />
+                <br />
+                <h:commandLink action="#{communityController.prepareList}" value="#{bundle.ViewCommunityShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewCommunityIndexLink}"/>
 
-        <p:dialog id="CommunityViewDlg" widgetVar="CommunityViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewCommunityTitle}">
-            <h:form id="CommunityViewForm">
-                <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{communityController.selected != null}">
-                        <h:outputText value="#{bundle.ViewCommunityLabel_id}"/>
-                        <h:outputText value="#{communityController.selected.id}" title="#{bundle.ViewCommunityTitle_id}"/>
-                        <h:outputText value="#{bundle.ViewCommunityLabel_communityname}"/>
-                        <h:outputText value="#{communityController.selected.communityname}" title="#{bundle.ViewCommunityTitle_communityname}"/>
-                        <h:outputText value="#{bundle.ViewCommunityLabel_city}"/>
-                        <h:outputText value="#{communityController.selected.city}" title="#{bundle.ViewCommunityTitle_city}"/>
-                        <h:outputText value="#{bundle.ViewCommunityLabel_state}"/>
-                        <h:outputText value="#{communityController.selected.state}" title="#{bundle.ViewCommunityTitle_state}"/>
-                        <h:outputText value="#{bundle.ViewCommunityLabel_description}"/>
-                        <h:outputText value="#{communityController.selected.description}" title="#{bundle.ViewCommunityTitle_description}"/>
-                    </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="CommunityViewDialog.hide()"/>
-                </h:panelGroup>
             </h:form>
-        </p:dialog>
-
+        </ui:define>
     </ui:composition>
+
 </html>

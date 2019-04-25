@@ -2,126 +2,197 @@ package edu.vt.controllers;
 
 import edu.vt.EntityBeans.CommunityContent;
 import edu.vt.controllers.util.JsfUtil;
-import edu.vt.controllers.util.JsfUtil.PersistAction;
+import edu.vt.controllers.util.PaginationHelper;
 import edu.vt.FacadeBeans.CommunityContentFacade;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.model.DataModel;
+import javax.faces.model.ListDataModel;
+import javax.faces.model.SelectItem;
+
 
 @Named("communityContentController")
 @SessionScoped
 public class CommunityContentController implements Serializable {
 
-    @EJB
-    private edu.vt.FacadeBeans.CommunityContentFacade ejbFacade;
-    private List<CommunityContent> items = null;
-    private CommunityContent selected;
+
+    private CommunityContent current;
+    private DataModel items = null;
+    @EJB private edu.vt.FacadeBeans.CommunityContentFacade ejbFacade;
+    private PaginationHelper pagination;
+    private int selectedItemIndex;
 
     public CommunityContentController() {
     }
 
     public CommunityContent getSelected() {
-        return selected;
-    }
-
-    public void setSelected(CommunityContent selected) {
-        this.selected = selected;
-    }
-
-    protected void setEmbeddableKeys() {
-    }
-
-    protected void initializeEmbeddableKey() {
+        if (current == null) {
+            current = new CommunityContent();
+            selectedItemIndex = -1;
+        }
+        return current;
     }
 
     private CommunityContentFacade getFacade() {
         return ejbFacade;
     }
+    public PaginationHelper getPagination() {
+        if (pagination == null) {
+            pagination = new PaginationHelper(10) {
 
-    public CommunityContent prepareCreate() {
-        selected = new CommunityContent();
-        initializeEmbeddableKey();
-        return selected;
+                @Override
+                public int getItemsCount() {
+                    return getFacade().count();
+                }
+
+                @Override
+                public DataModel createPageDataModel() {
+                    return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem()+getPageSize()}));
+                }
+            };
+        }
+        return pagination;
     }
 
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CommunityContentCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+    public String prepareList() {
+        recreateModel();
+        return "List";
+    }
+
+    public String prepareView() {
+        current = (CommunityContent)getItems().getRowData();
+        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
+        return "View";
+    }
+
+    public String prepareCreate() {
+        current = new CommunityContent();
+        selectedItemIndex = -1;
+        return "Create";
+    }
+
+    public String create() {
+        try {
+            getFacade().create(current);
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CommunityContentCreated"));
+            return prepareCreate();
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            return null;
         }
     }
 
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CommunityContentUpdated"));
+    public String prepareEdit() {
+        current = (CommunityContent)getItems().getRowData();
+        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
+        return "Edit";
     }
 
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("CommunityContentDeleted"));
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
+    public String update() {
+        try {
+            getFacade().edit(current);
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CommunityContentUpdated"));
+            return "View";
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            return null;
         }
     }
 
-    public List<CommunityContent> getItems() {
+    public String destroy() {
+        current = (CommunityContent)getItems().getRowData();
+        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
+        performDestroy();
+        recreatePagination();
+        recreateModel();
+        return "List";
+    }
+
+    public String destroyAndView() {
+        performDestroy();
+        recreateModel();
+        updateCurrentItem();
+        if (selectedItemIndex >= 0) {
+            return "View";
+        } else {
+            // all items were removed - go back to list
+            recreateModel();
+            return "List";
+        }
+    }
+
+    private void performDestroy() {
+        try {
+            getFacade().remove(current);
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("CommunityContentDeleted"));
+        } catch (Exception e) {
+            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+        }
+    }
+
+    private void updateCurrentItem() {
+        int count = getFacade().count();
+        if (selectedItemIndex >= count) {
+            // selected index cannot be bigger than number of items:
+            selectedItemIndex = count-1;
+            // go to previous page if last page disappeared:
+            if (pagination.getPageFirstItem() >= count) {
+                pagination.previousPage();
+            }
+        }
+        if (selectedItemIndex >= 0) {
+            current = getFacade().findRange(new int[]{selectedItemIndex, selectedItemIndex+1}).get(0);
+        }
+    }
+
+    public DataModel getItems() {
         if (items == null) {
-            items = getFacade().findAll();
+            items = getPagination().createPageDataModel();
         }
         return items;
     }
 
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
+    private void recreateModel() {
+        items = null;
+    }
+
+    private void recreatePagination() {
+        pagination = null;
+    }
+
+    public String next() {
+        getPagination().nextPage();
+        recreateModel();
+        return "List";
+    }
+
+    public String previous() {
+        getPagination().previousPage();
+        recreateModel();
+        return "List";
+    }
+
+    public SelectItem[] getItemsAvailableSelectMany() {
+        return JsfUtil.getSelectItems(ejbFacade.findAll(), false);
+    }
+
+    public SelectItem[] getItemsAvailableSelectOne() {
+        return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
     }
 
     public CommunityContent getCommunityContent(java.lang.Integer id) {
-        return getFacade().find(id);
+        return ejbFacade.find(id);
     }
 
-    public List<CommunityContent> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
-    }
-
-    public List<CommunityContent> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
-    }
-
-    @FacesConverter(forClass = CommunityContent.class)
+    @FacesConverter(forClass=CommunityContent.class)
     public static class CommunityContentControllerConverter implements Converter {
 
         @Override
@@ -129,7 +200,7 @@ public class CommunityContentController implements Serializable {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            CommunityContentController controller = (CommunityContentController) facesContext.getApplication().getELResolver().
+            CommunityContentController controller = (CommunityContentController)facesContext.getApplication().getELResolver().
                     getValue(facesContext.getELContext(), null, "communityContentController");
             return controller.getCommunityContent(getKey(value));
         }
@@ -155,8 +226,7 @@ public class CommunityContentController implements Serializable {
                 CommunityContent o = (CommunityContent) object;
                 return getStringKey(o.getId());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), CommunityContent.class.getName()});
-                return null;
+                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: "+CommunityContent.class.getName());
             }
         }
 

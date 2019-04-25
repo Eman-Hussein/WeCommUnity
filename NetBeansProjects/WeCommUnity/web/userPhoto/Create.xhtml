@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateUserPhotoTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateUserPhotoLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{userPhotoController.selected.id}" title="#{bundle.CreateUserPhotoTitle_id}" required="true" requiredMessage="#{bundle.CreateUserPhotoRequiredMessage_id}"/>
+                    <h:outputLabel value="#{bundle.CreateUserPhotoLabel_extension}" for="extension" />
+                    <h:inputText id="extension" value="#{userPhotoController.selected.extension}" title="#{bundle.CreateUserPhotoTitle_extension}" required="true" requiredMessage="#{bundle.CreateUserPhotoRequiredMessage_extension}"/>
+                    <h:outputLabel value="#{bundle.CreateUserPhotoLabel_userId}" for="userId" />
+                    <h:selectOneMenu id="userId" value="#{userPhotoController.selected.userId}" title="#{bundle.CreateUserPhotoTitle_userId}" >
+                        <f:selectItems value="#{userController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{userPhotoController.create}" value="#{bundle.CreateUserPhotoSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{userPhotoController.prepareList}" value="#{bundle.CreateUserPhotoShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateUserPhotoIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

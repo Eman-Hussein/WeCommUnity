@@ -17,7 +17,6 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -66,10 +65,9 @@ public class Community implements Serializable {
     @Size(min = 1, max = 16777215)
     @Column(name = "description")
     private String description;
-    @ManyToMany(mappedBy = "communityCollection")
-    private Collection<Member1> member1Collection;
-    @OneToMany(mappedBy = "communityId")
-    private Collection<CommunityContent> communityContentCollection;
+    // commented these as they were creating an exception
+//    @ManyToMany(mappedBy = "communityCollection")
+//    private Collection<User> userCollection;
 
     public Community() {
     }
@@ -126,23 +124,14 @@ public class Community implements Serializable {
         this.description = description;
     }
 
-    @XmlTransient
-    public Collection<Member1> getMember1Collection() {
-        return member1Collection;
-    }
-
-    public void setMember1Collection(Collection<Member1> member1Collection) {
-        this.member1Collection = member1Collection;
-    }
-
-    @XmlTransient
-    public Collection<CommunityContent> getCommunityContentCollection() {
-        return communityContentCollection;
-    }
-
-    public void setCommunityContentCollection(Collection<CommunityContent> communityContentCollection) {
-        this.communityContentCollection = communityContentCollection;
-    }
+//    @XmlTransient
+//    public Collection<User> getUserCollection() {
+//        return userCollection;
+//    }
+//
+//    public void setUserCollection(Collection<User> userCollection) {
+//        this.userCollection = userCollection;
+//    }
 
     @Override
     public int hashCode() {

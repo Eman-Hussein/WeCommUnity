@@ -3,30 +3,44 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:composition>
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewPublicContentTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewPublicContentLabel_id}"/>
+                    <h:outputText value="#{publicContentController.selected.id}" title="#{bundle.ViewPublicContentTitle_id}"/>
+                    <h:outputText value="#{bundle.ViewPublicContentLabel_publicContentame}"/>
+                    <h:outputText value="#{publicContentController.selected.publicContentame}" title="#{bundle.ViewPublicContentTitle_publicContentame}"/>
+                    <h:outputText value="#{bundle.ViewPublicContentLabel_dateEntered}"/>
+                    <h:outputText value="#{publicContentController.selected.dateEntered}" title="#{bundle.ViewPublicContentTitle_dateEntered}">
+                        <f:convertDateTime pattern="MM/dd/yyyy" />
+                    </h:outputText>
+                    <h:outputText value="#{bundle.ViewPublicContentLabel_category}"/>
+                    <h:outputText value="#{publicContentController.selected.category}" title="#{bundle.ViewPublicContentTitle_category}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{publicContentController.destroyAndView}" value="#{bundle.ViewPublicContentDestroyLink}"/>
+                <br />
+                <br />
+                <h:link outcome="Edit" value="#{bundle.ViewPublicContentEditLink}"/>
+                <br />
+                <h:commandLink action="#{publicContentController.prepareCreate}" value="#{bundle.ViewPublicContentCreateLink}" />
+                <br />
+                <h:commandLink action="#{publicContentController.prepareList}" value="#{bundle.ViewPublicContentShowAllLink}"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.ViewPublicContentIndexLink}"/>
 
-        <p:dialog id="PublicContentViewDlg" widgetVar="PublicContentViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewPublicContentTitle}">
-            <h:form id="PublicContentViewForm">
-                <h:panelGroup id="display">
-                    <p:panelGrid columns="2" rendered="#{publicContentController.selected != null}">
-                        <h:outputText value="#{bundle.ViewPublicContentLabel_id}"/>
-                        <h:outputText value="#{publicContentController.selected.id}" title="#{bundle.ViewPublicContentTitle_id}"/>
-                        <h:outputText value="#{bundle.ViewPublicContentLabel_publicContentame}"/>
-                        <h:outputText value="#{publicContentController.selected.publicContentame}" title="#{bundle.ViewPublicContentTitle_publicContentame}"/>
-                        <h:outputText value="#{bundle.ViewPublicContentLabel_dateEntered}"/>
-                        <h:outputText value="#{publicContentController.selected.dateEntered}" title="#{bundle.ViewPublicContentTitle_dateEntered}">
-                            <f:convertDateTime pattern="MM/dd/yyyy" />
-                        </h:outputText>
-                        <h:outputText value="#{bundle.ViewPublicContentLabel_category}"/>
-                        <h:outputText value="#{publicContentController.selected.category}" title="#{bundle.ViewPublicContentTitle_category}"/>
-                    </p:panelGrid>
-                    <p:commandButton value="#{bundle.Close}" onclick="PublicContentViewDialog.hide()"/>
-                </h:panelGroup>
             </h:form>
-        </p:dialog>
-
+        </ui:define>
     </ui:composition>
+
 </html>

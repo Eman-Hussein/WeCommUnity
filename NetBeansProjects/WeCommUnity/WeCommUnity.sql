@@ -8,10 +8,10 @@
 Tables to be dropped must be listed in a logical order based on dependency.
 UserFile depend on User. Therefore, they must be dropped before User. Same for Commmunity
 */
-DROP TABLE IF EXISTS UserContent, AccessedFile, UserCommunity, UserInterest, PublicFile, Message, Member ;
+DROP TABLE IF EXISTS UserContent, AccessedFile, UserCommunity, UserInterest, PublicFile, Message, User ;
 DROP TABLE IF EXISTS UserContent, UserCommunity, CommunityInterest,CommunityContent, Community;
-/* The Member table contains attributes of interest of a User. */
-CREATE TABLE Member
+/* The User table contains attributes of interest of a User. */
+CREATE TABLE User
 (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     username VARCHAR(32) NOT NULL,
@@ -23,6 +23,15 @@ CREATE TABLE Member
     email VARCHAR(128) NOT NULL,      
     biography MEDIUMTEXT NOT NULL,
     PRIMARY KEY (id)
+);
+
+/* The UserPhoto table contains attributes of interest of a user's photo. */
+CREATE TABLE UserPhoto
+(
+       id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT NOT NULL,
+       extension ENUM('jpeg', 'jpg', 'png', 'gif') NOT NULL,
+       user_id INT UNSIGNED,
+       FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Community
@@ -49,7 +58,7 @@ CREATE TABLE UserCommunity
     user_id INT UNSIGNED NOT NULL,
     community_id INT UNSIGNED NOT NULL,
     
-    FOREIGN KEY (user_id) REFERENCES Member(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
     FOREIGN KEY (community_id) REFERENCES Community(id) ON DELETE CASCADE
 );
 
@@ -59,7 +68,7 @@ CREATE TABLE UserInterest
     user_id INT UNSIGNED ,
     interest_id INT UNSIGNED,
     
-    FOREIGN KEY (user_id) REFERENCES Member(id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE
 );
 
 /*Junction Table*/
@@ -83,7 +92,7 @@ CREATE TABLE UserContent
        location VARCHAR(256),/*for metadata purposes- Dublin core metadata */
 
        PRIMARY KEY(id),
-       FOREIGN KEY (creator_id) REFERENCES Member(id) ON DELETE CASCADE
+       FOREIGN KEY (creator_id) REFERENCES User(id) ON DELETE CASCADE
 );
 
 /*Junction Table: Users who have access to this file*/
@@ -92,7 +101,7 @@ CREATE TABLE AccessedContent
     user_id INT UNSIGNED,
     content_id INT UNSIGNED,
     
-    FOREIGN KEY (user_id) REFERENCES Member(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES User(id) ON DELETE CASCADE,
     FOREIGN KEY (content_id) REFERENCES UserContent(id) ON DELETE CASCADE
 );
 
@@ -128,8 +137,8 @@ CREATE TABLE Message /*messages are 1:1 */
     timestamp DATE NOT NULL,    /* YYYY-MM-DD */
     
     PRIMARY KEY (id),
-    FOREIGN KEY (sender_id) REFERENCES Member(id) ON DELETE CASCADE,
-    FOREIGN KEY (recipient_id) REFERENCES Member(id) ON DELETE CASCADE
+    FOREIGN KEY (sender_id) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY (recipient_id) REFERENCES User(id) ON DELETE CASCADE
     
 
 );

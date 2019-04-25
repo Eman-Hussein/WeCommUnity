@@ -46,11 +46,11 @@ Copyright © 2018 Osman Balci. All rights reserved.
                     *******************************
                     -->
                     <td align="center" valign="middle">
-                        <c:choose>
-                            <c:when test="#{userController.isAdministrator() == true}"> 
+                        <!--                        <c:choose>-->
+<!--                            <c:when test="#{userController.isAdministrator() == true}"> 
                                 <div class="helloText">Hello, Administrator</div>
                             </c:when> 
-                            <c:otherwise> 
+                            <c:otherwise> -->
                                 <c:choose>
                                     <c:when test="#{userController.isLoggedIn() == true}"> 
                                         <div class="helloText">Hello, #{userController.selected.firstName}</div>
@@ -61,8 +61,8 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                         </c:when>
                                     </c:otherwise>
                                 </c:choose>
-                            </c:otherwise>
-                        </c:choose>
+<!--                            </c:otherwise>-->
+<!--                        </c:choose>-->
                     </td>
                     <!--
                     ***************************************
@@ -86,13 +86,25 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                 <h:link outcome="/index" class="standardText">
                                     <i class="fas fa-home"></i>&nbsp;Home
                                 </h:link>
-                                <h:link outcome="/community/List" class="standardText">
-                                    <i class="fas fa-home"></i>&nbsp;Communities 
+                                <h:link outcome="/community/AllCommunitiesList" class="standardText">
+                                    <i class="fas fa-home"></i>&nbsp;Explore All Communities 
                                 </h:link>
+                                <c:choose>
+                                    <c:when test="#{userController.isLoggedIn() == true}"> 
+                                        <h:link outcome="/community/UserCommunitiesList" class="standardText">
+                                            <i class="fas fa-home"></i>&nbsp;My Communities 
+                                        </h:link>
+                                    </c:when> 
+<!--                                    <c:otherwise>
+                                        <c:when test="#{userController.isLoggedIn() == false}">
+                                            <h1>Hello Dear Visitor</h1>
+                                        </c:when>
+                                    </c:otherwise>-->
+                                </c:choose>
+
                                 <h:link outcome="/publicContent/List" class="standardText">
-                                    <i class="fas fa-home"></i>&nbsp;Contents
+                                    <i class="fas fa-home"></i>&nbsp; Explore Content
                                 </h:link>
-                                
 
                                 <!-- 
                                 ===============================================================
@@ -102,9 +114,9 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                 <c:choose>
                                     <c:when test="#{userController.isAdministrator() == true}"> 
 
-<!--                                        <h:commandLink action="#{surveyReportManager.init()}" class="standardText" >
+                                        <h:commandLink action="#{surveyReportManager.init()}" class="standardText" >
                                             <i class="fas fa-file-alt"></i>&nbsp;Generate Report
-                                        </h:commandLink>-->
+                                        </h:commandLink>
                                         <h:link outcome="/userSurvey/SurveysReport" class="standardText">
                                             <i class="fas fa-pencil-alt"></i>&nbsp;Generate Report
                                         </h:link>
@@ -127,7 +139,7 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                                             value="#{userController.userPhoto()}"/>&nbsp;&nbsp;Admin Account
                                         </h:link>
 
-                                        <!--  Clicking "Sign Out" invokes userController's logout() method -->
+                                        <!--                                        Clicking "Sign Out" invokes userController's logout() method -->
                                         <h:commandLink action="#{userController.logout()}" class="standardText" >
                                             <i class="fas fa-sign-out-alt"></i>&nbsp;Sign Out
                                         </h:commandLink>
@@ -138,15 +150,16 @@ Copyright © 2018 Osman Balci. All rights reserved.
                                             <c:when test="#{userController.isLoggedIn() == true}"> 
 
                                                 <h:link outcome="/userContent/List" class="standardText" >
-                                                    <i class="fas fa-pencil-alt"></i>&nbsp;Your Content
+                                                    <i class="fas fa-pencil-alt"></i>&nbsp;My Content
                                                 </h:link>
-                                                
-<!--
-Check this with Eman
-                                                <h:link outcome="/userContent/" class="standardText" >
-                                                    <i class="fas fa-check"></i>&nbsp;Contribute 
-                                                </h:link>
--->
+
+                                                <!--
+                                                Check this with Eman
+                                                -->                                                                                                
+                                                <!--                                                <h:link outcome="/userContent/" class="standardText" >
+                                                                                                    <i class="fas fa-check"></i>&nbsp;Contribute 
+                                                                                                </h:link>-->
+
                                                 <!-- Clicking "My Account" displays the Profile.xhtml file -->
                                                 <h:link outcome="/userAccount/UserProfile" class="standardText">
                                                     <!-- 
@@ -164,7 +177,6 @@ Check this with Eman
 
                                             </c:when> 
                                             <c:otherwise>
-
                                                 <c:when test="#{userController.isLoggedIn() == false}">
                                                     <!-- Clicking "Sign In" displays the SignIn.xhtml file -->
                                                     <h:link outcome="/SignIn" class="standardText">
@@ -177,32 +189,31 @@ Check this with Eman
                                                     </h:link>
 
                                                     <h:link outcome="/About" class="standardText">
-                                                        <i class="fas fa-pencil-alt"></i>&nbsp;About We CommUnity
+                                                        <i class="fas fa-pencil-alt"></i>&nbsp;About WeCommUnity
                                                     </h:link>
                                                 </c:when>
 
                                             </c:otherwise>
                                         </c:choose>
                                     </c:otherwise> 
-                                </c:choose>
+                                        </c:choose>
 
-                                <!-- 
-                                ============================================
-                                |   Menu Options IF No User is Signed In   |
-                                ============================================
-                                -->
+                                        <!-- 
+                                        ============================================
+                                        |   Menu Options IF No User is Signed In   |
+                                        ============================================
+                                        -->
 
 
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+                                        </div>
+                                        </div>
+                                        </td>
+                                        </tr>
+                                        </table>
+                                        </h:form>
 
-        </h:form>
+                                        </ui:composition>
+                                        <!-- Do not enter tags before the composition line since they are ignored by JSF -->
 
-    </ui:composition>
-    <!-- Do not enter tags before the composition line since they are ignored by JSF -->
-
-</html>
+                                        </html>
 
